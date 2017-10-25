@@ -1,0 +1,24 @@
+---
+- name: Install git
+  apt:
+    pkg: git
+    state: latest
+    update_cache: yes
+
+- stat: path=/opt/easy-rsa
+  register: easyrsa3_cloned
+
+- name: Cloning easy-rsa
+  shell: /usr/bin/git clone https://github.com/Sifungurux/easy-rsa.git
+  args:
+    chdir: /opt
+  when: easyrsa3_cloned.stat.exists != True
+  environment:
+    PATH: $PATH:/opt/easy-rsa/easyrsa3
+    
+- lineinfile:
+    path: /etc/profile.d/path.sh
+    create: yes
+    line: export PATH=$PATH:/opt/easy-rsa/easyrsa3
+
+- debug: msg="{{ easyrsa3_cloned }}"

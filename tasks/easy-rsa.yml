@@ -1,0 +1,31 @@
+---
+
+- name: Include variables
+  vars:
+  include_vars:
+    file: defaults/easy-rsa.yml
+
+- name: Create folder
+  file:
+    path: "{{ parent_dir }}/certs"
+    state: directory
+    mode: 0700
+
+- name: Certificate file check
+  stat:
+    path: "{{ parent_dir }}/certs/dh{{ easy_rsa_keys.size }}.pem"
+  register: certs_build
+
+- name: vars configuraion
+  template:
+    src=templates/vars.j2
+    dest="{{ parent_dir }}/vars"
+
+- name: init-pki
+  shell: "easyrsa init-pki --vars={{ parent_dir }}/vars"
+  when: easyrsa3_cloned.stat.exists == True
+  environment:
+    PATH: $PATH:/opt/easy-rsa/easyrsa3
+#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa/ init-pki
+#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa/ build-ca nopass
+#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa/ build-server-full easyrsa nopass
