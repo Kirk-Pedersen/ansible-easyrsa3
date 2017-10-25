@@ -12,7 +12,7 @@ easy_rsa_keys:
         email: "me@myhost.mydomain"
         organizational_unit: "MyOrganizationalUnit"
         common_name: matrix-synapse
-        name: matrix certificates
+        name: matrixCertificates
         alt_name: .
 
         # Certification settings
