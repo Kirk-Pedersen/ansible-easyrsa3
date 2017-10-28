@@ -1,7 +1,7 @@
 ---
 
 # Easy-rsa configuration
-easy_rsa_dir: /usr/share/easy-rsa
+certification_name: "{{ ansible_hostname }}"
 easy_rsa_keys:
         country: "DK"
         province: "FYN"

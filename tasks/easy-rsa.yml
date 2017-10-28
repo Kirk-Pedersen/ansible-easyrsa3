@@ -13,22 +13,32 @@
 
 - name: Certificate file check
   stat:
-    path: "{{ parent_dir }}/issued/{{ansible_hostname}}.crt"
+    path: "{{ parent_dir }}/issued/{{certification_name}}.crt"
   register: certs_build
 
 - name: vars configuraion
   template:
     src=../templates/vars.j2
-    dest="/etc/ssl/vars/vars.{{ansible_hostname}}"
+    dest="/etc/ssl/vars/vars.{{certification_name}}"
 
-- name: init-pki
-  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa init-pki"
+- name: Building certs
+  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} {{ item }}"
   when: certs_build.stat.exists != True
+  with_items:
+    - "init-pki"
+    - "build-ca nopass"
+    - "build-server-full {{ certification_name}} nopass"
 
-- name: build-ca
-  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-ca nopass"
-  when: certs_build.stat.exists != True
 
-- name: server cert and key creation
-  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-server-full {{ ansible_hostname }} nopass"
-  when: certs_build.stat.exists != True
+
+#- name: init-pki
+#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}}" --pki-dir=/etc/ssl/{{ certification_name}} init-pki"
+#  when: certs_build.stat.exists != True
+
+#- name: build-ca
+#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}}" --pki-dir=/etc/ssl/{{ certification_name}} build-ca nopass"
+#  when: certs_build.stat.exists != True
+
+#- name: server cert and key creation
+#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} build-server-full {{ certification_name}} nopass"
+#  when: certs_build.stat.exists != True
