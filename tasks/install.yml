@@ -1,4 +1,5 @@
 ---
+
 - name: Install git
   apt:
     pkg: git
@@ -15,10 +16,8 @@
   when: easyrsa3_cloned.stat.exists != True
   environment:
     PATH: $PATH:/opt/easy-rsa/easyrsa3
-    
+
 - lineinfile:
     path: /etc/profile.d/path.sh
     create: yes
     line: export PATH=$PATH:/opt/easy-rsa/easyrsa3
-
-- debug: msg="{{ easyrsa3_cloned }}"

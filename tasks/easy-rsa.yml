@@ -3,7 +3,7 @@
 - name: Include variables
   vars:
   include_vars:
-    file: ../defaults/easy-rsa.yml
+    file: ../defaults/main.yml
 
 - name: Create folder
   file:
@@ -13,7 +13,7 @@
 
 - name: Certificate file check
   stat:
-    path: "{{ parent_dir }}/certs/dh{{ easy_rsa_keys.size }}.pem"
+    path: "{{ parent_dir }}/issued/{{ansible_hostname}}.crt"
   register: certs_build
 
 - name: vars configuraion
@@ -23,16 +23,12 @@
 
 - name: init-pki
   shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa init-pki"
-  when: easyrsa3_cloned.stat.exists == True
+  when: certs_build.stat.exists != True
 
-- name: init-pki
+- name: build-ca
   shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-ca nopass"
-  when: easyrsa3_cloned.stat.exists == True
+  when: certs_build.stat.exists != True
 
-- name: init-pki
+- name: server cert and key creation
   shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-server-full {{ ansible_hostname }} nopass"
-  when: easyrsa3_cloned.stat.exists == True
-
-#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa init-pki
-#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-ca nopass
-#/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/easyrsa/vars --pki-dir=/etc/ssl/easyrsa build-server-full easyrsa.kirk-pedersen.dk nopass
+  when: certs_build.stat.exists != True

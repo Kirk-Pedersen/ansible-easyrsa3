@@ -2,25 +2,6 @@
 # Easy-rsa configuration Debian
 parent_dir: "/etc/ssl/{{ansible_hostname}}"
 
-# Easy-rsa configuration
-easy_rsa_dir: /usr/share/easy-rsa
-easy_rsa_keys:
-        country: "DK"
-        province: "FYN"
-        city: "Odense"
-        organization: "test"
-        email: "me@myhost.mydomain"
-        organizational_unit: "MyOrganizationalUnit"
-        common_name: matrix-synapse
-        name: matrixCertificates
-        alt_name: .
-
-        # Certification settings
-        size: 1024 # Entropy
-        ca_expire: 3650 # 10 years
-        key_expire: 3650 # 10 years
-        tls_auth: True
-
 easy_rsa_cert_dir: "{{ parent_dir }}/certs"
 easy_rsa_ca_key_file: "{{ easy_rsa_cert_dir }}/ca.key"
 easy_rsa_ca_crt_file: "{{ easy_rsa_cert_dir }}/ca.crt"

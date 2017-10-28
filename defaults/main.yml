@@ -1,8 +1,20 @@
 ---
 
-# Server configurations
-report_stats: no
-shared_secret: Hemmeligt
+# Easy-rsa configuration
+easy_rsa_dir: /usr/share/easy-rsa
+easy_rsa_keys:
+        country: "DK"
+        province: "FYN"
+        city: "Odense"
+        organization: "test"
+        email: "me@myhost.mydomain"
+        organizational_unit: "MyOrganizationalUnit"
+        common_name: matrix-synapse
+        name: matrixCertificates
+        alt_name: .
 
-# Admin settings
-admin_password: testpassword
+        # Certification settings
+        size: 1024 # Entropy
+        ca_expire: 3650 # 10 years
+        key_expire: 3650 # 10 years
+        tls_auth: True
