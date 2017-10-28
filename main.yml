@@ -1,8 +1,0 @@
----
-
-- hosts: all
-  become: yes
-  become_method: sudo
-  tasks:
-          - include_tasks: tasks/install.yml
-          - include_tasks: tasks/easy-rsa.yml
