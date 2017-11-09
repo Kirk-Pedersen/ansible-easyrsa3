@@ -16,6 +16,11 @@
     path: "{{ parent_dir }}/issued/{{certification_name}}.crt"
   register: certs_build
 
+- name: dh.pem file check
+  stat:
+    path: "{{ parent_dir }}/dh.pem"
+  register: dhpem_build
+
 - name: vars configuraion
   template:
     src=../templates/vars.j2
@@ -32,4 +37,4 @@
 
 - name: Build dhpem file
   shell: "export EASYRSA_KEY_SIZE={{ easy_rsa_keys.size }} && /opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} gen-dh"
-  when: easy_rsa_keys.size is defined
+  when: easy_rsa_keys.size is defined and dhpem_build.stat.exists != true

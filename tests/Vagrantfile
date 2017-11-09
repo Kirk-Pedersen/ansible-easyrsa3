@@ -1,12 +1,15 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/stretch64"
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.vm.define "easyrsa" do |easyrsa|
      easyrsa.vm.hostname = "easyrsa"
      easyrsa.vm.network "public_network", dev: "wlp4s0:", bridge: "wlp4s0:"
      easyrsa.vm.provision :ansible do |ansible|
        ansible.limit = "all"
-     #  ansible.inventory_path = "test/hosts/vagrant"
        ansible.playbook = "test.yml"
-    end
+     end
+     easyrsa.vm.provision :shell do |shell|
+       shell.inline = "sed -i -e 's/%sudo\tALL=NOPASSWD:ALL/%sudo\tALL=(ALL:ALL) ALL/' /etc/sudoers"
+     end
   end
 end
