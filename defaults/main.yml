@@ -17,4 +17,4 @@ easy_rsa_keys:
         size: 1024 # Entropy
         ca_expire: 3650 # 10 years
         key_expire: 3650 # 10 years
-        tls_auth: True
+        tls_auth: false

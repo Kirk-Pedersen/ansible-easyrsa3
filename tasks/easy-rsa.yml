@@ -30,15 +30,6 @@
     - "build-server-full {{ certification_name}} nopass"
 
 
-
-#- name: init-pki
-#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}}" --pki-dir=/etc/ssl/{{ certification_name}} init-pki"
-#  when: certs_build.stat.exists != True
-
-#- name: build-ca
-#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}}" --pki-dir=/etc/ssl/{{ certification_name}} build-ca nopass"
-#  when: certs_build.stat.exists != True
-
-#- name: server cert and key creation
-#  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} build-server-full {{ certification_name}} nopass"
-#  when: certs_build.stat.exists != True
+- name: Build dhpem file
+  shell: "export EASYRSA_KEY_SIZE={{ easy_rsa_keys.size }} && /opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} gen-dh"
+  when: easy_rsa_keys.size is defined
