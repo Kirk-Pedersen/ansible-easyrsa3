@@ -4,4 +4,4 @@
   become_method: sudo
   gather_facts: yes
   roles:
-          - ansible-easyrsa3
+          - { role: ../../ansible-easyrsa3 }
