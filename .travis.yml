@@ -1,7 +1,8 @@
 ---
+
+
 addons:
-  hosts:
-    - easyrsa-test.kirk-pedersen.dk
+  hostname: easyrsa-test
 
 language: python
 python: "2.7"
