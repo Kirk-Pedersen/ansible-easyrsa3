@@ -18,4 +18,4 @@ script:
         - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become | tee /tmp/output.txt; grep -q 'changed=0.*failed=0' /tmp/output.txt
-        - ls /etc/ssl/easyrsa-test/issued/easyrsa-test.crt
+        - sudo ls /etc/ssl/easyrsa-test/issued/easyrsa-test.crt
