@@ -19,4 +19,10 @@ script:
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become | tee /tmp/output.txt; grep -q 'changed=0.*failed=0' /tmp/output.txt
         - sudo ls /etc/ssl/easyrsa-test/issued/easyrsa-test.crt
+        - sudo ls /etc/ssl/easyrsa-test/private/easyrsa-test.key
         - sudo ls /etc/ssl/easyrsa-test/dh.pem
+        - sudo openssl x509 -in /etc/ssl/easyrsa-test/issued/easyrsa-test.crt -text -noout
+        - sudo openssl rsa -in /etc/ssl/easyrsa-test/private/easyrsa-test.key -check
+        - sudoif [ $(openssl x509 -noout -modulus -in issued/easyrsa.crt| openssl md5| cut -f2 -d" ") == $(openssl rsa -noout -modulus -in private/easyrsa.key| openssl md5| cut -f2 -d" ") ]; then \        
+echo OK \
+fi
