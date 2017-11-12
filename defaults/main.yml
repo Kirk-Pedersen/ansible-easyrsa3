@@ -17,5 +17,7 @@ easy_rsa_keys:
         size: 2048 # Entropy
         ca_expire: 3650 # 10 years
         key_expire: 3650 # 10 years
-        tls_auth: false
-        #dhpem: true
+
+tls_auth: false
+#if dh.pem certificate is needed add as a vars
+dhpem: false 

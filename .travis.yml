@@ -19,5 +19,5 @@ script:
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become
         - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become | tee /tmp/output.txt; grep -q 'changed=0.*failed=0' /tmp/output.txt
         - sudo ls /etc/ssl/easyrsa-test/issued/easyrsa-test.crt
-        - ansible-playbook -i tests/inventory tests/test.yml --connection=local --become --extra-vars "easy_rsa_keys.dhpem=true" && sudo ls /etc/ssl/easyrsa-test/dh.pem
+        - sudo ls /etc/ssl/easyrsa-test/dh.pem
 

@@ -21,9 +21,6 @@
     path: "{{ parent_dir }}/dh.pem"
   register: dhpem_build
 
-- debug:
-    msg: dhpem_build.stat
-
 - name: vars configuraion
   template:
     src=../templates/vars.j2
@@ -39,5 +36,5 @@
 
 
 - name: Build dhpem file
-  shell: "export EASYRSA_KEY_SIZE={{ easy_rsa_keys.size }} && /opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} gen-dh"
-  when: easy_rsa_keys.dhpem is defined and dhpem_build.stat.exists != true
+  shell: "/opt/easy-rsa/easyrsa3/easyrsa --batch --vars=/etc/ssl/vars/vars.{{certification_name}} --pki-dir=/etc/ssl/{{ certification_name}} gen-dh"
+  when: dhpem == true and dhpem_build.stat.exists != true
